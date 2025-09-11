@@ -17,6 +17,8 @@ app.use(morgan('tiny'));
 
 //connect to Database
 connectMongo(); 
+/////////////////////////////////////////////////////
+app.use(express.json());
 
 //load the routes
 app.use('/',require('./server/routes/routes'));//Pulls the routes file whenever this is loaded

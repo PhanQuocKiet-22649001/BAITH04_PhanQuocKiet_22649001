@@ -5,6 +5,13 @@ const services = require('../services/render');//uses the render.js file from se
 const controller = require('../controller/controller');//uses the render.js file from services here
 
 
+const validateCard = require('../middleware/validateCard');
+const validateDosage    = require('../middleware/validateDosage');
+const validateName= require('../middleware/validateName');
+const validatePack = require('../middleware/validatePack');
+const validatePerDay = require('../middleware/validatePerDay');
+
+
 route.get('/', services.home);
 
 
@@ -17,9 +24,19 @@ route.get('/update-drug', services.updateDrug);
 
 
 // API for CRUD operations
-route.post('/api/drugs', controller.create);
+//route.post('/api/drugs', controller.create);
+route.post(
+    '/api/drugs', 
+    [validateName, validateDosage, validateCard, validatePack, validatePerDay], 
+    controller.create
+);
 route.get('/api/drugs', controller.find);
-route.put('/api/drugs/:id', controller.update);
+//route.put('/api/drugs/:id', controller.update);
+route.put(
+    '/api/drugs/:id', 
+    [validateName, validateDosage, validateCard, validatePack, validatePerDay], 
+    controller.update
+);
 route.delete('/api/drugs/:id', controller.delete);
 
 module.exports = route;//exports this so it can always be used elsewhere
