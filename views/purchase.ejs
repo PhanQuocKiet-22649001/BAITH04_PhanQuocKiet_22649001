@@ -31,6 +31,33 @@
 		</tbody>
 	</table>
 </main>
+
+<!-- cập nhật số lương thuoc cần mua khi nhấn enter -->
+<script>
+  const drugs = <%- JSON.stringify(drugs) %>;
+
+  document.getElementById("drug_days").addEventListener("submit", function (e) {
+    e.preventDefault(); // không reload trang
+    const days = parseInt(document.getElementById("days").value) || 30;
+
+    const tbody = document.querySelector("#purchase_table tbody");
+    tbody.innerHTML = "";
+
+    drugs.forEach((drug, i) => {
+      const pills = days * drug.perDay;
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${drug.name}</td>
+        <td>${Math.ceil(pills/drug.card)} (${drug.pack/drug.card} ${drug.pack/drug.card < 2 ? "card" : "cards"} per pack)</td>
+        <td>${Math.ceil(pills/drug.pack)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+</script>
+
 <!-- End main section -->
 <!-- add footer -->
 <%- include('includes/_footer') %>

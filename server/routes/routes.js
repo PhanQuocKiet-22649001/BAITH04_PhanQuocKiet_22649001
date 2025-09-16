@@ -39,4 +39,30 @@ route.put(
 );
 route.delete('/api/drugs/:id', controller.delete);
 
+
+
+// API để thực hiện mua thuốc
+route.post('/api/purchase', (req, res) => {
+    try {
+        const { drugs } = req.body; // Lấy danh sách thuốc từ client gửi lên
+
+        if (!drugs || drugs.length === 0) {
+            return res.status(400).json({ success: false, message: "No drugs selected" });
+        }
+
+        // TODO: Ở đây bạn có thể xử lý lưu đơn hàng vào DB, hoặc tính toán gì đó
+        console.log("Purchase request:", drugs);
+
+        return res.status(200).json({
+            success: true,
+            message: "Purchase success",
+            data: drugs
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+
 module.exports = route;//exports this so it can always be used elsewhere

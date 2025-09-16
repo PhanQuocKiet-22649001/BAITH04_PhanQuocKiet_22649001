@@ -19,7 +19,7 @@
         </div>
         <div class="row mb-3 form-group justify-content-center">
             <label for="card" class="col-3 col-form-label">Tablets per Card</label>
-            <input type="number" name="card" value="<%= drug.card %>" placeholder="Tablets per Card" min="1" max="500" class="col-xs-8 col-md-4">
+            <input type="number" name="card" value="<%= drug.card %>" placeholder="Tablets per Card" min="1000"  class="col-xs-8 col-md-4">
         </div>
         <div class="row mb-3 form-group justify-content-center">
             <label for="pack" class="col-3 col-form-label">Tablets per Pack</label>
@@ -40,6 +40,45 @@
     </div>
 </form>
 </main>
+
+
+<!-- Xử lí update -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("update_drug");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const id = form.querySelector("input[name='id']").value;
+      const payload = {
+        name: form.querySelector("input[name='name']").value,
+        card: form.querySelector("input[name='card']").value,
+        pack: form.querySelector("input[name='pack']").value,
+        perDay: form.querySelector("input[name='perDay']").value,
+        dosage: form.querySelector("input[name='dosage']").value,
+      };
+
+      fetch(`/api/drugs/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          alert(data.message || "Drug updated successfully!");
+          window.location.href = "/manage"; // quay về trang manager
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Failed to update drug!");
+        });
+    });
+  });
+</script>
+
+
+
 <!-- End main section -->
 <!-- add footer -->
 <%- include('includes/_footer') %>

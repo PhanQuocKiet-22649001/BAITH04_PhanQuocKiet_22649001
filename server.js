@@ -7,6 +7,8 @@ const connectMongo = require('./server/database/connect');//requires connect.js 
 const PORT = process.env.PORT || 3100; //uses either what's in our env or 3100 as our port (you can use any unused port)
 
 
+
+
 app.set('view engine', 'ejs');//Put before app.use, etc. Lets us use EJS for views
 //use body-parser to parse requests
 app.use(bodyParser.urlencoded({extended:true}));
@@ -22,6 +24,32 @@ app.use(express.json());
 
 //load the routes
 app.use('/',require('./server/routes/routes'));//Pulls the routes file whenever this is loaded
+
+
+
+// ---------- Error Handlers ----------
+
+// 404 - Page Not Found
+app.use((req, res, next) => {
+  res.status(404).render("error", {
+    title: "Page Not Found",
+    message: "The page you are looking for does not exist.",
+    status: 404,
+    stack: null // thêm stack = null để EJS không lỗi
+  });
+});
+
+// 500 - Internal Server Error
+app.use((err, req, res, next) => {
+  console.error(err.stack); // log chi tiết lỗi ra console
+  res.status(500).render("error", {
+    title: "Server Error",
+    message: err.message || "Something went wrong! Please try again later.",
+    status: 500,
+    stack: process.env.NODE_ENV === "development" ? err.stack : null
+  });
+});
+// ---------- End Error Handlers ----------
 
 
 app.listen(PORT, function() {//specifies port to listen on
